@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA WEALTH | Luxury Loan, EMI & Finance Suite</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            obsidian: '#08090C',
+            charcoal: '#11131A',
+            surface: '#181B24',
+            gold: {
+              DEFAULT: '#D4AF37',
+              light: '#F3E5AB',
+              dark: '#AA820A',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #08090C;
+      color: #F1F5F9;
+      overflow-x: hidden;
+    }
+    .glass-card {
+      background: rgba(24, 27, 36, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 175, 55, 0.14);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(212, 175, 55, 0.4);
+      transform: translateY(-2px);
+      transition: all 0.25s ease;
+    }
+    .gold-gradient {
+      background: linear-gradient(135deg, #D4AF37 0%, #F3E5AB 50%, #AA820A 100%);
+    }
+    .gold-text {
+      background: linear-gradient(135deg, #FFF3B0 0%, #D4AF37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .cc-visual {
+      background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.25), rgba(17, 19, 26, 0.95) 70%);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #08090C; }
+    ::-webkit-scrollbar-thumb { background: #262B38; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row selection:bg-gold selection:text-obsidian">
+
+  <!-- SIDEBAR NAVIGATION (Desktop) -->
+  <aside class="w-full lg:w-72 bg-charcoal border-b lg:border-b-0 lg:border-r border-white/10 lg:min-h-screen flex flex-col justify-between p-5 z-30">
+    <div>
+      <!-- Brand Logo -->
+      <div class="flex items-center justify-between lg:justify-start gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl gold-gradient flex items-center justify-center shadow-lg shadow-gold/20">
+          <i data-lucide="crown" class="w-6 h-6 text-obsidian"></i>
+        </div>
+        <div>
+          <h1 class="font-serif text-xl font-bold tracking-wider gold-text">AURA WEALTH</h1>
+          <p class="text-[11px] text-slate-400 tracking-widest uppercase">Smart EMI & Ledger Suite</p>
+        </div>
+      </div>
+
+      <!-- Global Controls: Month & Holder Filter -->
+      <div class="space-y-3 mb-6 p-3.5 rounded-xl bg-obsidian/70 border border-white/5">
+        <div>
+          <label class="text-[11px] uppercase tracking-wider text-slate-400 block mb-1">Active Month</label>
+          <input type="month" id="globalMonth" onchange="handleGlobalChange()" class="w-full bg-surface text-sm font-medium text-white rounded-lg px-3 py-2 border border-white/10 focus:border-gold outline-none">
+        </div>
+        <div>
+          <label class="text-[11px] uppercase tracking-wider text-slate-400 block mb-1">Account Holder Filter</label>
+          <div class="grid grid-cols-3 gap-1 bg-surface p-1 rounded-lg border border-white/10">
+            <button onclick="setHolderFilter('ALL')" id="filter-ALL" class="text-xs py-1.5 rounded-md font-semibold transition-all bg-gold text-obsidian">All</button>
+            <button onclick="setHolderFilter('Self')" id="filter-Self" class="text-xs py-1.5 rounded-md font-medium text-slate-300 hover:text-white transition-all">Self</button>
+            <button onclick="setHolderFilter('Wife')" id="filter-Wife" class="text-xs py-1.5 rounded-md font-medium text-slate-300 hover:text-white transition-all">Wife</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex lg:flex-col gap-1.5 overflow-x-auto pb-2 lg:pb-0" id="navLinks">
+        <button onclick="switchTab('dashboard')" data-tab="dashboard" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap bg-gold/15 text-gold border border-gold/30">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+        </button>
+        <button onclick="switchTab('cards')" data-tab="cards" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">
+          <i data-lucide="credit-card" class="w-4 h-4"></i> Cards & Monthly Bills
+        </button>
+        <button onclick="switchTab('loans')" data-tab="loans" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">
+          <i data-lucide="landmark" class="w-4 h-4"></i> Loans & EMI Tracker
+        </button>
+        <button onclick="switchTab('cashflow')" data-tab="cashflow" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">
+          <i data-lucide="wallet" class="w-4 h-4"></i> Income & GPay Spend
+        </button>
+        <button onclick="switchTab('reports')" data-tab="reports" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">
+          <i data-lucide="pie-chart" class="w-4 h-4"></i> Category Drill-Down
+        </button>
+        <button onclick="switchTab('khata')" data-tab="khata" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">
+          <i data-lucide="book-open-check" class="w-4 h-4"></i> Khata Book (Friends)
+        </button>
+      </nav>
+    </div>
+
+    <!-- Backup / Restore Footer -->
+    <div class="hidden lg:block pt-6 border-t border-white/10 space-y-2">
+      <div class="flex gap-2">
+        <button onclick="exportData()" class="flex-1 flex items-center justify-center gap-1.5 text-xs bg-surface hover:bg-white/10 text-slate-300 py-2 px-3 rounded-lg border border-white/10 transition">
+          <i data-lucide="download" class="w-3.5 h-3.5 text-gold"></i> Backup
+        </button>
+        <label class="flex-1 flex items-center justify-center gap-1.5 text-xs bg-surface hover:bg-white/10 text-slate-300 py-2 px-3 rounded-lg border border-white/10 transition cursor-pointer">
+          <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-400"></i> Restore
+          <input type="file" accept=".json" onchange="importData(event)" class="hidden">
+        </label>
+      </div>
+      <button onclick="resetDemoData()" class="w-full text-[11px] text-slate-500 hover:text-rose-400 py-1 transition">Reset to Sample Data</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-1 p-4 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
+
+    <!-- ==================== 1. DASHBOARD VIEW ==================== -->
+    <section id="view-dashboard" class="tab-view space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-gold font-semibold">Executive Overview</span>
+          <h2 class="text-2xl md:text-3xl font-serif font-bold text-white mt-0.5">Wealth & Liability Command Center</h2>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="openModal('modal-expense')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/25 text-xs font-semibold transition">
+            <i data-lucide="minus-circle" class="w-4 h-4"></i> + GPay / Spend
+          </button>
+          <button onclick="openModal('modal-income')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Income
+          </button>
+          <button onclick="openModal('modal-loan')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl gold-gradient text-obsidian text-xs font-bold shadow-lg shadow-gold/20 hover:opacity-95 transition">
+            <i data-lucide="plus" class="w-4 h-4"></i> Add Loan / EMI
+          </button>
+        </div>
+      </div>
+
+      <!-- Smart Accounting Protection Banner -->
+      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-gold flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <div class="p-2 rounded-lg bg-gold/10 text-gold mt-0.5">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-white">Smart Double-Counting Shield Active</h4>
+            <p class="text-xs text-slate-400 mt-0.5" id="smartShieldSummary">
+              Calculating automatic deductions for Card EMIs & RuPay UPI Spends...
+            </p>
+          </div>
+        </div>
+        <span class="text-[11px] px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium whitespace-nowrap">
+          100% Accurate Balance
+        </span>
+      </div>
+
+      <!-- Primary KPI Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardKpis">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Two Column: Monthly Payment Checklist & Holder Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Monthly Due Checklist (EMIs + Card Bills) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i data-lucide="calendar-check-2" class="w-4 h-4 text-gold"></i>
+                This Month's Payment Dues (EMIs & Net Card Bills)
+              </h3>
+              <p class="text-xs text-slate-400">Click status button to mark Paid or Unpaid for the selected month</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400 block">Pending This Month</span>
+              <span class="text-sm font-bold text-rose-400" id="dashPendingTotal">₹0</span>
+            </div>
+          </div>
+          <div class="space-y-2.5 max-h-96 overflow-y-auto pr-1" id="dashDueList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Holder-Wise & Khata Quick Summary -->
+        <div class="space-y-6">
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="text-base font-bold text-white flex items-center gap-2 mb-4">
+              <i data-lucide="users" class="w-4 h-4 text-gold"></i>
+              Holder Liability Split (Self vs. Wife)
+            </h3>
+            <div class="space-y-4" id="holderSplitBox">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i data-lucide="handshake" class="w-4 h-4 text-gold"></i>
+                Khata Book Position
+              </h3>
+              <button onclick="switchTab('khata')" class="text-xs text-gold hover:underline">Open Ledger →</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3" id="dashKhataBox">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. CREDIT CARDS & MONTHLY BILLS VIEW ==================== -->
+    <section id="view-cards" class="tab-view hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-gold font-semibold">Cards & Statement Reconciliation</span>
+          <h2 class="text-2xl font-serif font-bold text-white mt-0.5">Credit Cards & Auto-EMI Deduction</h2>
+          <p class="text-xs text-slate-400 mt-1">Jab aap Card ka monthly bill enter karenge, us card ki active EMIs automatically minus ho jayengi.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="openModal('modal-bill')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gold/15 text-gold border border-gold/30 hover:bg-gold/25 text-xs font-semibold transition">
+            <i data-lucide="receipt" class="w-4 h-4"></i> Enter Monthly Card Bill
+          </button>
+          <button onclick="openModal('modal-card')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl gold-gradient text-obsidian text-xs font-bold shadow-lg shadow-gold/20 transition">
+            <i data-lucide="plus" class="w-4 h-4"></i> + Add Credit Card
+          </button>
+        </div>
+      </div>
+
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="cardsGrid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ==================== 3. LOANS & EMI TRACKER VIEW ==================== -->
+    <section id="view-loans" class="tab-view hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-gold font-semibold">Debt Amortization & Status</span>
+          <h2 class="text-2xl font-serif font-bold text-white mt-0.5">Active Loans & Card EMIs</h2>
+          <p class="text-xs text-slate-400 mt-1">Track Bank Loans & Credit Card EMIs, remaining months, total balance, and monthly paid status.</p>
+        </div>
+        <button onclick="openModal('modal-loan')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl gold-gradient text-obsidian text-xs font-bold shadow-lg shadow-gold/20 transition">
+          <i data-lucide="plus" class="w-4 h-4"></i> + Add New Loan / EMI
+        </button>
+      </div>
+
+      <!-- Loan Summary Strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="loanSummaryStrip">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Loans List -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="loansGrid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ==================== 4. INCOME & GPAY / EXPENSE VIEW ==================== -->
+    <section id="view-cashflow" class="tab-view hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-gold font-semibold">Monthly Inflow & Daily Spends</span>
+          <h2 class="text-2xl font-serif font-bold text-white mt-0.5">Income Sources & GPay Expenses</h2>
+          <p class="text-xs text-slate-400 mt-1">RuPay Credit Card (via GPay) spends are tagged automatically and excluded from direct cash balance deduction.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="openModal('modal-income')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Income / Wallet
+          </button>
+          <button onclick="openModal('modal-expense')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl gold-gradient text-obsidian text-xs font-bold shadow-lg shadow-gold/20 transition">
+            <i data-lucide="smartphone" class="w-4 h-4"></i> + Add GPay / Spend
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Income Column -->
+        <div class="lg:col-span-5 glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="arrow-down-left" class="w-4 h-4 text-emerald-400"></i>
+              Income & Wallet Inflows
+            </h3>
+            <span class="text-sm font-bold text-emerald-400" id="cashflowIncomeTotal">₹0</span>
+          </div>
+          <div class="space-y-2.5 max-h-[500px] overflow-y-auto pr-1" id="incomeList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Expenses / GPay Column -->
+        <div class="lg:col-span-7 glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-rose-400"></i>
+                GPay & Daily Expenses Log
+              </h3>
+              <p class="text-[11px] text-slate-400">Items marked <span class="text-amber-300">RuPay CC</span> do not reduce bank cash twice</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400 block">Direct Cash Spend / Total Spend</span>
+              <span class="text-sm font-bold text-white" id="cashflowExpenseTotals">₹0 / ₹0</span>
+            </div>
+          </div>
+          <div class="space-y-2.5 max-h-[500px] overflow-y-auto pr-1" id="expenseList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. REPORTS & CATEGORY DRILL-DOWN VIEW ==================== -->
+    <section id="view-reports" class="tab-view hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-gold font-semibold">Interactive Analytics</span>
+          <h2 class="text-2xl font-serif font-bold text-white mt-0.5">Category Spend & Differential Report</h2>
+          <p class="text-xs text-slate-400 mt-1">Kisi bhi Category Card par click karein uske saare date-wise kharche dekhne ke liye.</p>
+        </div>
+      </div>
+
+      <!-- Differential Breakdown Equation Card -->
+      <div class="glass-card rounded-2xl p-6" id="differentialEquationBox">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Category Cards (Left 6 Cols) -->
+        <div class="lg:col-span-6 glass-card rounded-2xl p-5">
+          <h3 class="text-base font-bold text-white mb-1 flex items-center gap-2">
+            <i data-lucide="layers" class="w-4 h-4 text-gold"></i>
+            Monthly Category Wise Spend
+          </h3>
+          <p class="text-xs text-slate-400 mb-4">Click on any category below to inspect date-wise transactions</p>
+          <div class="space-y-3" id="categoryCardsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Category Drill-Down Inspector (Right 6 Cols) -->
+        <div class="lg:col-span-6 glass-card rounded-2xl p-5 border border-gold/30">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+            <div>
+              <span class="text-[10px] uppercase tracking-widest text-gold font-bold">Category Drill-Down View</span>
+              <h3 class="text-lg font-bold text-white" id="drilldownCategoryTitle">Select a Category</h3>
+            </div>
+            <span class="text-base font-bold text-gold" id="drilldownCategoryTotal">₹0</span>
+          </div>
+          <div class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1" id="drilldownTransactionsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. KHATA BOOK (FRIENDS LEDGER) VIEW ==================== -->
+    <section id="view-khata" class="tab-view hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-gold font-semibold">Personal Udhaar & Friend Ledger</span>
+          <h2 class="text-2xl font-serif font-bold text-white mt-0.5">Khata Book (Len-Den Tracker)</h2>
+          <p class="text-xs text-slate-400 mt-1">Apne friends add karein aur rojana ka date-wise हिसाब (Maine Diye / Maine Liye) maintain karein.</p>
+        </div>
+        <button onclick="openModal('modal-friend')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl gold-gradient text-obsidian text-xs font-bold shadow-lg shadow-gold/20 transition">
+          <i data-lucide="user-plus" class="w-4 h-4"></i> + Add Friend Account
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Friends List (Left 5 Cols) -->
+        <div class="lg:col-span-5 glass-card rounded-2xl p-5">
+          <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+            <i data-lucide="contact" class="w-4 h-4 text-gold"></i>
+            Friends Directory
+          </h3>
+          <div class="space-y-2.5 max-h-[500px] overflow-y-auto pr-1" id="khataFriendsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Friend Statement & Entry (Right 7 Cols) -->
+        <div class="lg:col-span-7 glass-card rounded-2xl p-5 border border-gold/25" id="khataDetailPanel">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODALS FOR DATA ENTRY ==================== -->
+
+  <!-- 1. ADD CREDIT CARD MODAL -->
+  <div id="modal-card" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-md w-full p-6 border border-gold/30">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-serif font-bold text-white">Add Credit Card</h3>
+        <button onclick="closeModal('modal-card')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveCard(event)" class="space-y-4 text-sm">
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Card Name (e.g. HDFC Regalia, SBI Cashback)</label>
+          <input type="text" id="cardName" required placeholder="HDFC Millennia" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Card Holder</label>
+            <select id="cardHolder" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+              <option value="Self">Self (Mera Card)</option>
+              <option value="Wife">Wife</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Card Network</label>
+            <select id="cardNetwork" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+              <option value="RuPay UPI">RuPay (UPI Enabled)</option>
+              <option value="Visa / Mastercard">Visa / Mastercard</option>
+              <option value="Amex">Amex</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Bill Generation Day (1-31)</label>
+            <input type="number" id="cardBillDay" min="1" max="31" required placeholder="e.g. 15" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Payment Due Day (1-31)</label>
+            <input type="number" id="cardDueDay" min="1" max="31" required placeholder="e.g. 5" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+          </div>
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-obsidian font-bold shadow-lg">Save Credit Card</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. ENTER MONTHLY CARD BILL MODAL -->
+  <div id="modal-bill" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-md w-full p-6 border border-gold/30">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-serif font-bold text-white">Enter Monthly Card Statement Bill</h3>
+        <button onclick="closeModal('modal-bill')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveCardBill(event)" class="space-y-4 text-sm">
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Select Credit Card</label>
+          <select id="billCardId" required onchange="previewBillDeduction()" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none"></select>
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Statement Month</label>
+          <input type="month" id="billMonth" required onchange="previewBillDeduction()" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Total Statement Bill Amount (Including EMI & GST) (₹)</label>
+          <input type="number" id="billTotalAmount" required min="0" step="1" oninput="previewBillDeduction()" placeholder="e.g. 28500" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+        </div>
+        <!-- Live Auto-Deduction Preview Box -->
+        <div class="p-3.5 rounded-xl bg-obsidian/90 border border-gold/30 space-y-1.5 text-xs" id="billPreviewBox">
+          <div class="flex justify-between text-slate-400">
+            <span>Total Statement Bill:</span>
+            <span id="prevTotalBill" class="text-white font-semibold">₹0</span>
+          </div>
+          <div class="flex justify-between text-amber-400">
+            <span>(-) Active EMIs on this Card:</span>
+            <span id="prevCardEmi" class="font-semibold">- ₹0</span>
+          </div>
+          <div class="border-t border-white/10 pt-1.5 flex justify-between text-emerald-400 font-bold text-sm">
+            <span>Net Retail Bill Added to Outflow:</span>
+            <span id="prevNetBill">₹0</span>
+          </div>
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-obsidian font-bold shadow-lg">Save Monthly Bill</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. ADD LOAN / EMI MODAL -->
+  <div id="modal-loan" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-lg w-full p-6 border border-gold/30 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-serif font-bold text-white">Add Bank Loan or Credit Card EMI</h3>
+        <button onclick="closeModal('modal-loan')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveLoan(event)" class="space-y-3.5 text-sm">
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Loan / Product Name (e.g. iPhone 15 EMI, Car Loan)</label>
+          <input type="text" id="loanName" required placeholder="MacBook Pro EMI / Personal Loan" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Loan Type</label>
+            <select id="loanType" onchange="toggleLoanCardSelect()" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+              <option value="CARD_EMI">Credit Card EMI</option>
+              <option value="BANK_LOAN">Bank Account Loan</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Holder Name</label>
+            <select id="loanHolder" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+              <option value="Self">Self</option>
+              <option value="Wife">Wife</option>
+            </select>
+          </div>
+        </div>
+        <div id="loanCardSelectWrapper">
+          <label class="text-xs text-amber-300 block mb-1">Linked Credit Card (Is EMI ko Card Bill se auto-less karne ke liye)</label>
+          <select id="loanLinkedCard" class="w-full bg-obsidian border border-amber-400/40 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none"></select>
+        </div>
+        <div id="loanBankNameWrapper" class="hidden">
+          <label class="text-xs text-slate-400 block mb-1">Bank / Lender Name</label>
+          <input type="text" id="loanBankName" placeholder="e.g. SBI / HDFC Bank" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Total Loan Principal (₹)</label>
+            <input type="number" id="loanPrincipal" required min="1" placeholder="100000" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Interest Rate (% p.a.)</label>
+            <input type="number" id="loanRate" step="0.01" required placeholder="14.5" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Monthly EMI (Incl. Interest/GST) (₹)</label>
+            <input type="number" id="loanEmi" required min="1" placeholder="5200" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">EMI Deduction Day (1-31)</label>
+            <input type="number" id="loanEmiDay" required min="1" max="31" placeholder="5" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Total Duration (Months)</label>
+            <input type="number" id="loanTotalMonths" required min="1" placeholder="24" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Remaining EMIs Left</label>
+            <input type="number" id="loanRemainingMonths" required min="0" placeholder="10" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none">
+          </div>
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-obsidian font-bold shadow-lg mt-2">Save Loan / EMI</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. ADD INCOME MODAL -->
+  <div id="modal-income" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-md w-full p-6 border border-gold/30">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-serif font-bold text-white">Add Income / Wallet Inflow</h3>
+        <button onclick="closeModal('modal-income')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveIncome(event)" class="space-y-4 text-sm">
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Source Description (Salary, Freelance, Wallet Balance)</label>
+          <input type="text" id="incSource" required placeholder="Monthly Salary / Cashback Wallet" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Amount (₹)</label>
+            <input type="number" id="incAmount" required min="1" placeholder="65000" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Holder</label>
+            <select id="incHolder" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+              <option value="Self">Self</option>
+              <option value="Wife">Wife</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Date</label>
+          <input type="date" id="incDate" required class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-obsidian font-bold shadow-lg">Add Income</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. ADD GPAY / EXPENSE MODAL -->
+  <div id="modal-expense" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-md w-full p-6 border border-gold/30">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-serif font-bold text-white">Add GPay / Daily Expense</h3>
+        <button onclick="closeModal('modal-expense')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveExpense(event)" class="space-y-3.5 text-sm">
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Expense Description (Kahan kharch kiya)</label>
+          <input type="text" id="expDesc" required placeholder="Groceries / Petrol / Zomato" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Amount (₹)</label>
+            <input type="number" id="expAmount" required min="1" placeholder="850" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Category</label>
+            <select id="expCategory" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+              <option value="Groceries & Dining">Groceries & Dining</option>
+              <option value="Fuel & Travel">Fuel & Travel</option>
+              <option value="Shopping & Lifestyle">Shopping & Lifestyle</option>
+              <option value="Bills & Utilities">Bills & Utilities</option>
+              <option value="Medical & Health">Medical & Health</option>
+              <option value="Family & Misc">Family & Misc</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="text-xs text-amber-300 block mb-1">Payment Mode (Smart Balance Protection)</label>
+          <select id="expMode" onchange="toggleExpCardSelect()" class="w-full bg-obsidian border border-amber-400/40 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+            <option value="UPI_BANK">GPay - Bank Account / Cash (Direct Deduction)</option>
+            <option value="RUPAY_CC">GPay - RuPay Credit Card (Already in Card Bill - Auto Exclude)</option>
+          </select>
+        </div>
+        <div id="expCardSelectWrapper" class="hidden">
+          <label class="text-xs text-slate-400 block mb-1">Which RuPay Credit Card was used?</label>
+          <select id="expLinkedCard" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2 text-white focus:border-gold outline-none"></select>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Spent By (Holder)</label>
+            <select id="expHolder" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+              <option value="Self">Self</option>
+              <option value="Wife">Wife</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1">Date</label>
+            <input type="date" id="expDate" required class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+          </div>
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-obsidian font-bold shadow-lg">Save Expense</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. ADD KHATA FRIEND MODAL -->
+  <div id="modal-friend" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-md w-full p-6 border border-gold/30">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-serif font-bold text-white">Add Friend to Khata Book</h3>
+        <button onclick="closeModal('modal-friend')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveFriend(event)" class="space-y-4 text-sm">
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Friend's Full Name</label>
+          <input type="text" id="friendName" required placeholder="e.g. Rahul Verma" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Phone / Note (Optional)</label>
+          <input type="text" id="friendPhone" placeholder="e.g. Office Colleague" class="w-full bg-obsidian border border-white/15 rounded-xl px-3.5 py-2.5 text-white focus:border-gold outline-none">
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-obsidian font-bold shadow-lg">Create Khata Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== APPLICATION LOGIC ==================== -->
+  <script>
+    const STORAGE_KEY = 'AURA_WEALTH_FINANCE_V1';
+    let currentHolderFilter = 'ALL';
+    let currentMonth = '2026-10';
+    let selectedReportCategory = null;
+    let selectedKhataFriendId = null;
+
+    // Default Demo Data (Tailored to showcase all smart rules immediately)
+    const defaultData = {
+      cards: [
+        { id: 'c1', name: 'HDFC Tata Neu Infinity', holder: 'Self', network: 'RuPay UPI', billDay: 18, dueDay: 5 },
+        { id: 'c2', name: 'ICICI Amazon Pay', holder: 'Self', network: 'Visa / Mastercard', billDay: 20, dueDay: 8 },
+        { id: 'c3', name: 'SBI SimplyCLICK', holder: 'Wife', network: 'Visa / Mastercard', billDay: 12, dueDay: 2 }
+      ],
+      loans: [
+        { id: 'l1', name: 'Sony Bravia OLED EMI', type: 'CARD_EMI', cardId: 'c1', bankName: 'HDFC Card', holder: 'Self', principal: 72000, rate: 15, emi: 6400, emiDay: 5, totalMonths: 12, remainingMonths: 7, paidMonths: { '2026-10': true } },
+        { id: 'l2', name: 'iPhone 15 EMI', type: 'CARD_EMI', cardId: 'c2', bankName: 'ICICI Card', holder: 'Self', principal: 66000, rate: 14, emi: 5850, emiDay: 8, totalMonths: 12, remainingMonths: 5, paidMonths: { '2026-10': false } },
+        { id: 'l3', name: 'Car Upgrade Bank Loan', type: 'BANK_LOAN', cardId: null, bankName: 'SBI Bank', holder: 'Self', principal: 350000, rate: 9.2, emi: 11200, emiDay: 10, totalMonths: 36, remainingMonths: 22, paidMonths: { '2026-10': true } },
+        { id: 'l4', name: 'Gold Jewellery EMI', type: 'CARD_EMI', cardId: 'c3', bankName: 'SBI Card', holder: 'Wife', principal: 45000, rate: 13.5, emi: 4100, emiDay: 2, totalMonths: 12, remainingMonths: 8, paidMonths: { '2026-10': false } }
+      ],
+      cardBills: [
+        // Total statement bill includes the ₹6,400 EMI. App will auto-deduct ₹6,400 so net bill is ₹12,100
+        { id: 'b1', cardId: 'c1', month: '2026-10', totalBill: 18500, paid: false },
+        { id: 'b2', cardId: 'c2', month: '2026-10', totalBill: 9850, paid: false },
+        { id: 'b3', cardId: 'c3', month: '2026-10', totalBill: 7600, paid: true }
+      ],
+      incomes: [
+        { id: 'i1', source: 'Monthly Salary Account', amount: 75000, holder: 'Self', date: '2026-10-01', month: '2026-10' },
+        { id: 'i2', source: 'Spouse Income / Savings', amount: 28000, holder: 'Wife', date: '2026-10-02', month: '2026-10' },
+        { id: 'i3', source: 'Amazon Pay / GPay Wallet Cashback', amount: 1850, holder: 'Self', date: '2026-10-06', month: '2026-10' }
+      ],
+      expenses: [
+        { id: 'e1', desc: 'Reliance Smart Monthly Grocery', amount: 4200, category: 'Groceries & Dining', mode: 'RUPAY_CC', cardId: 'c1', holder: 'Self', date: '2026-10-04', month: '2026-10' },
+        { id: 'e2', desc: 'Indian Oil Petrol Pump (GPay)', amount: 2500, category: 'Fuel & Travel', mode: 'UPI_BANK', cardId: null, holder: 'Self', date: '2026-10-06', month: '2026-10' },
+        { id: 'e3', desc: 'Electricity & Fiber Broadband', amount: 3100, category: 'Bills & Utilities', mode: 'UPI_BANK', cardId: null, holder: 'Self', date: '2026-10-08', month: '2026-10' },
+        { id: 'e4', desc: 'Family Dinner & Sweets (RuPay UPI)', amount: 1850, category: 'Groceries & Dining', mode: 'RUPAY_CC', cardId: 'c1', holder: 'Wife', date: '2026-10-10', month: '2026-10' },
+        { id: 'e5', desc: 'Festive Kurta & Sneakers', amount: 3600, category: 'Shopping & Lifestyle', mode: 'UPI_BANK', cardId: null, holder: 'Self', date: '2026-10-12', month: '2026-10' }
+      ],
+      khataFriends: [
+        {
+          id: 'f1', name: 'Amit Tiwari', phone: 'Colleague',
+          txns: [
+            { id: 'k1', date: '2026-10-03', desc: 'Transferred on GPay for Urgent Work', type: 'GAVE', amount: 5000 },
+            { id: 'k2', date: '2026-10-09', desc: 'Cash returned by Amit', type: 'GOT', amount: 2000 }
+          ]
+        },
+        {
+          id: 'f2', name: 'Sandeep Mishra', phone: 'Friend',
+          txns: [
+            { id: 'k3', date: '2026-10-05', desc: 'Dinner Split Share', type: 'GOT', amount: 1200 }
+          ]
+        }
+      ]
+    };
+
+    let db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || JSON.parse(JSON.stringify(defaultData));
+
+    function saveDb() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      renderAll();
+    }
+
+    function formatINR(num) {
+      const n = Number(num) || 0;
+      return '₹' + n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+    }
+
+    // Core Smart Engine: Calculate active EMIs linked to a specific Credit Card
+    function getCardActiveEmiSum(cardId) {
+      return db.loans
+        .filter(l => l.type === 'CARD_EMI' && l.cardId === cardId && Number(l.remainingMonths) > 0)
+        .reduce((sum, l) => sum + Number(l.emi), 0);
+    }
+
+    // Calculate net statement bill (Statement Bill minus Linked Card EMIs, floored at 0)
+    function getNetCardBill(cardId, month) {
+      const billObj = db.cardBills.find(b => b.cardId === cardId && b.month === month);
+      if (!billObj) return { exists: false, totalBill: 0, emiDeducted: 0, netBill: 0, paid: false };
+      const emiSum = getCardActiveEmiSum(cardId);
+      const net = Math.max(0, Number(billObj.totalBill) - emiSum);
+      return {
+        exists: true,
+        id: billObj.id,
+        totalBill: Number(billObj.totalBill),
+        emiDeducted: emiSum,
+        netBill: net,
+        paid: !!billObj.paid
+      };
+    }
+
+    function passHolder(itemHolder) {
+      return currentHolderFilter === 'ALL' || itemHolder === currentHolderFilter;
+    }
+
+    // Master Calculation Function for Active Month & Holder Filter
+    function computeMonthlyFinancials() {
+      // 1. Income
+      const monthIncomes = db.incomes.filter(i => i.month === currentMonth && passHolder(i.holder));
+      const totalIncome = monthIncomes.reduce((s, i) => s + Number(i.amount), 0);
+
+      // 2. Active Loans & EMIs
+      const activeLoans = db.loans.filter(l => Number(l.remainingMonths) > 0 && passHolder(l.holder));
+      const totalMonthlyEmi = activeLoans.reduce((s, l) => s + Number(l.emi), 0);
+      const totalRemainingDebt = activeLoans.reduce((s, l) => s + (Number(l.emi) * Number(l.remainingMonths)), 0);
+
+      // 3. Net Credit Card Bills (Statement Bill - Card EMI)
+      const filteredCards = db.cards.filter(c => passHolder(c.holder));
+      let totalGrossCardBills = 0;
+      let totalCardEmiDeducted = 0;
+      let totalNetCardBills = 0;
+
+      filteredCards.forEach(c => {
+        const b = getNetCardBill(c.id, currentMonth);
+        if (b.exists) {
+          totalGrossCardBills += b.totalBill;
+          totalCardEmiDeducted += b.emiDeducted;
+          totalNetCardBills += b.netBill;
+        }
+      });
+
+      // 4. GPay & Daily Spends (Split into Direct Bank UPI vs RuPay Credit Card UPI)
+      const monthExpenses = db.expenses.filter(e => e.month === currentMonth && passHolder(e.holder));
+      const directBankExpenses = monthExpenses
+        .filter(e => e.mode === 'UPI_BANK')
+        .reduce((s, e) => s + Number(e.amount), 0);
+      const rupayCcExpenses = monthExpenses
+        .filter(e => e.mode === 'RUPAY_CC')
+        .reduce((s, e) => s + Number(e.amount), 0);
+
+      // 5. True Non-Duplicated Outflow = All EMIs + Net Card Bills + Direct Bank UPI Spends
+      const totalTrueOutflow = totalMonthlyEmi + totalNetCardBills + directBankExpenses;
+      const netDifferential = totalIncome - totalTrueOutflow;
+
+      return {
+        totalIncome,
+        totalMonthlyEmi,
+        totalRemainingDebt,
+        totalGrossCardBills,
+        totalCardEmiDeducted,
+        totalNetCardBills,
+        directBankExpenses,
+        rupayCcExpenses,
+        totalCategorySpend: directBankExpenses + rupayCcExpenses,
+        totalTrueOutflow,
+        netDifferential,
+        activeLoans,
+        filteredCards,
+        monthIncomes,
+        monthExpenses
+      };
+    }
+
+    // ==================== RENDER FUNCTIONS ====================
+
+    function renderDashboard() {
+      const fin = computeMonthlyFinancials();
+
+      // Update Smart Shield Banner
+      document.getElementById('smartShieldSummary').innerHTML = `
+        Is mahine Card Bills me se <strong class="text-gold">${formatINR(fin.totalCardEmiDeducted)} (Card EMIs)</strong> aur GPay me se <strong class="text-amber-300">${formatINR(fin.rupayCcExpenses)} (RuPay CC Spends)</strong> ko double-counting se bachaya gaya hai.
+      `;
+
+      // KPI Cards
+      const diffColor = fin.netDifferential >= 0 ? 'text-emerald-400' : 'text-rose-400';
+      document.getElementById('dashboardKpis').innerHTML = `
+        <div class="glass-card rounded-2xl p-5 glass-card-hover">
+          <div class="flex justify-between items-start">
+            <span class="text-xs uppercase tracking-wider text-slate-400">Monthly Income</span>
+            <span class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400"><i data-lucide="trending-up" class="w-4 h-4"></i></span>
+          </div>
+          <div class="text-2xl font-bold text-white mt-2">${formatINR(fin.totalIncome)}</div>
+          <p class="text-[11px] text-slate-400 mt-1">Filter: <span class="text-gold font-semibold">${currentHolderFilter}</span> (${currentMonth})</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 glass-card-hover">
+          <div class="flex justify-between items-start">
+            <span class="text-xs uppercase tracking-wider text-slate-400">True Monthly Outflow</span>
+            <span class="p-2 rounded-lg bg-rose-500/10 text-rose-400"><i data-lucide="Layers" class="w-4 h-4"></i></span>
+          </div>
+          <div class="text-2xl font-bold text-white mt-2">${formatINR(fin.totalTrueOutflow)}</div>
+          <p class="text-[11px] text-slate-400 mt-1">EMIs (${formatINR(fin.totalMonthlyEmi)}) + Net Bills (${formatINR(fin.totalNetCardBills)}) + Cash (${formatINR(fin.directBankExpenses)})</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 glass-card-hover border border-gold/25">
+          <div class="flex justify-between items-start">
+            <span class="text-xs uppercase tracking-wider text-gold">Net Differential (Bachat)</span>
+            <span class="p-2 rounded-lg bg-gold/10 text-gold"><i data-lucide="scale" class="w-4 h-4"></i></span>
+          </div>
+          <div class="text-2xl font-bold ${diffColor} mt-2">${formatINR(fin.netDifferential)}</div>
+          <p class="text-[11px] text-slate-400 mt-1">${fin.netDifferential >= 0 ? 'Surplus Available' : 'Deficit (Over-spent)'}</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 glass-card-hover">
+          <div class="flex justify-between items-start">
+            <span class="text-xs uppercase tracking-wider text-slate-400">Total Remaining Loan Debt</span>
+            <span class="p-2 rounded-lg bg-amber-500/10 text-amber-400"><i data-lucide="landmark" class="w-4 h-4"></i></span>
+          </div>
+          <div class="text-2xl font-bold text-white mt-2">${formatINR(fin.totalRemainingDebt)}</div>
+          <p class="text-[11px] text-slate-400 mt-1">Across ${fin.activeLoans.length} active EMIs/Loans</p>
+        </div>
+      `;
+
+      // Monthly Due Checklist
+      let dueHtml = '';
+      let pendingSum = 0;
+
+      // Add Loans/EMIs to checklist
+      fin.activeLoans.forEach(loan => {
+        const isPaid = !!(loan.paidMonths && loan.paidMonths[currentMonth]);
+        if (!isPaid) pendingSum += Number(loan.emi);
+        dueHtml += `
+          <div class="flex items-center justify-between p-3 rounded-xl bg-obsidian/70 border border-white/5 hover:border-white/15 transition">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center ${loan.type === 'CARD_EMI' ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-400'}">
+                <i data-lucide="${loan.type === 'CARD_EMI' ? 'credit-card' : 'landmark'}" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-semibold text-white">${loan.name}</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full ${loan.holder === 'Self' ? 'bg-blue-500/20 text-blue-300' : 'bg-pink-500/20 text-pink-300'}">${loan.holder}</span>
+                </div>
+                <p class="text-[11px] text-slate-400">Due Day: ${loan.emiDay}th • ${loan.remainingMonths}/${loan.totalMonths} EMIs left</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-bold text-white">${formatINR(loan.emi)}</span>
+              <button onclick="toggleLoanPaid('${loan.id}')" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${isPaid ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'}">
+                ${isPaid ? '✓ Paid' : 'Unpaid'}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      // Add Net Card Bills to checklist
+      fin.filteredCards.forEach(card => {
+        const b = getNetCardBill(card.id, currentMonth);
+        if (b.exists) {
+          if (!b.paid) pendingSum += b.netBill;
+          dueHtml += `
+            <div class="flex items-center justify-between p-3 rounded-xl bg-obsidian/70 border border-gold/20 transition">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-gold/15 text-gold">
+                  <i data-lucide="receipt" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-semibold text-white">${card.name} (Net Bill)</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full ${card.holder === 'Self' ? 'bg-blue-500/20 text-blue-300' : 'bg-pink-500/20 text-pink-300'}">${card.holder}</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400">Statement: ${formatINR(b.totalBill)} minus Card EMI: ${formatINR(b.emiDeducted)}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-bold text-gold">${formatINR(b.netBill)}</span>
+                <button onclick="toggleBillPaid('${b.id}')" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${b.paid ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'}">
+                  ${b.paid ? '✓ Paid' : 'Unpaid'}
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      document.getElementById('dashPendingTotal').textContent = formatINR(pendingSum);
+      document.getElementById('dashDueList').innerHTML = dueHtml || `<p class="text-xs text-slate-500 py-4 text-center">No dues found for this filter.</p>`;
+
+      // Holder Split Box
+      const calcHolderMetrics = (h) => {
+        const emi = db.loans.filter(l => l.holder === h && l.remainingMonths > 0).reduce((s, l) => s + Number(l.emi), 0);
+        const debt = db.loans.filter(l => l.holder === h && l.remainingMonths > 0).reduce((s, l) => s + (Number(l.emi) * Number(l.remainingMonths)), 0);
+        return { emi, debt };
+      };
+      const selfM = calcHolderMetrics('Self');
+      const wifeM = calcHolderMetrics('Wife');
+
+      document.getElementById('holderSplitBox').innerHTML = `
+        <div class="p-3.5 rounded-xl bg-obsidian/70 border border-white/5 flex justify-between items-center">
+          <div>
+            <span class="text-xs font-bold text-blue-400 uppercase">Self (Mere Loans)</span>
+            <p class="text-xs text-slate-400 mt-0.5">Monthly EMI: <strong class="text-white">${formatINR(selfM.emi)}/mo</strong></p>
+          </div>
+          <div class="text-right">
+            <span class="text-[11px] text-slate-400 block">Remaining Liability</span>
+            <span class="text-sm font-bold text-white">${formatINR(selfM.debt)}</span>
+          </div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-obsidian/70 border border-white/5 flex justify-between items-center">
+          <div>
+            <span class="text-xs font-bold text-pink-400 uppercase">Wife's Loans</span>
+            <p class="text-xs text-slate-400 mt-0.5">Monthly EMI: <strong class="text-white">${formatINR(wifeM.emi)}/mo</strong></p>
+          </div>
+          <div class="text-right">
+            <span class="text-[11px] text-slate-400 block">Remaining Liability</span>
+            <span class="text-sm font-bold text-white">${formatINR(wifeM.debt)}</span>
+          </div>
+        </div>
+      `;
+
+      // Khata Summary on Dashboard
+      let totalLena = 0, totalDena = 0;
+      db.khataFriends.forEach(f => {
+        const bal = getFriendBalance(f);
+        if (bal > 0) totalLena += bal;
+        if (bal < 0) totalDena += Math.abs(bal);
+      });
+      document.getElementById('dashKhataBox').innerHTML = `
+        <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+          <span class="text-[11px] text-emerald-300 block">Apko Lena Hai (Receivable)</span>
+          <span class="text-lg font-bold text-emerald-400">${formatINR(totalLena)}</span>
+        </div>
+        <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20">
+          <span class="text-[11px] text-rose-300 block">Apko Dena Hai (Payable)</span>
+          <span class="text-lg font-bold text-rose-400">${formatINR(totalDena)}</span>
+        </div>
+      `;
+    }
+
+    function renderCardsView() {
+      const cards = db.cards.filter(c => passHolder(c.holder));
+      let html = '';
+
+      cards.forEach(c => {
+        const activeEmis = db.loans.filter(l => l.type === 'CARD_EMI' && l.cardId === c.id && l.remainingMonths > 0);
+        const emiSum = getCardActiveEmiSum(c.id);
+        const billInfo = getNetCardBill(c.id, currentMonth);
+
+        html += `
+          <div class="cc-visual rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+            <div>
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <span class="text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full font-bold ${c.holder === 'Self' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-pink-500/20 text-pink-300 border border-pink-500/30'}">
+                    Holder: ${c.holder}
+                  </span>
+                  <h3 class="text-xl font-serif font-bold text-white mt-2">${c.name}</h3>
+                  <p class="text-xs text-gold">${c.network}</p>
+                </div>
+                <button onclick="deleteItem('cards', '${c.id}')" class="text-slate-500 hover:text-rose-400 transition" title="Delete Card">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 my-4 p-3 rounded-xl bg-obsidian/60 border border-white/10 text-xs">
+                <div>
+                  <span class="text-slate-400 block">Bill Generation Date</span>
+                  <span class="text-white font-semibold">Every ${c.billDay}th of Month</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block">Payment Due Date</span>
+                  <span class="text-white font-semibold">Every ${c.dueDay}th of Month</span>
+                </div>
+              </div>
+
+              <!-- Monthly Bill Reconciliation Box -->
+              <div class="p-4 rounded-xl bg-obsidian/90 border border-gold/25 space-y-2 text-xs">
+                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                  <span class="font-bold text-gold uppercase tracking-wider">Statement (${currentMonth})</span>
+                  ${billInfo.exists ? `
+                    <button onclick="toggleBillPaid('${billInfo.id}')" class="px-2.5 py-0.5 rounded text-[11px] font-bold ${billInfo.paid ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}">
+                      ${billInfo.paid ? '✓ BILL PAID' : 'UNPAID'}
+                    </button>
+                  ` : `<span class="text-slate-500">Not Entered Yet</span>`}
+                </div>
+                <div class="flex justify-between text-slate-300">
+                  <span>Total Statement Bill Entered:</span>
+                  <span class="font-semibold">${billInfo.exists ? formatINR(billInfo.totalBill) : '₹0'}</span>
+                </div>
+                <div class="flex justify-between text-amber-400">
+                  <span>(-) Linked Active EMIs (${activeEmis.length}):</span>
+                  <span class="font-semibold">- ${formatINR(emiSum)}</span>
+                </div>
+                <div class="flex justify-between text-emerald-400 font-bold text-sm pt-1 border-t border-white/10">
+                  <span>Net Retail Bill (Counted in Expense):</span>
+                  <span>${billInfo.exists ? formatINR(billInfo.netBill) : '₹0'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-xs">
+              <span class="text-slate-400">Active EMIs on Card: <strong class="text-white">${activeEmis.map(a => a.name).join(', ') || 'None'}</strong></span>
+              <button onclick="openBillModalForCard('${c.id}')" class="text-gold hover:underline font-semibold whitespace-nowrap ml-2">Update Bill →</button>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('cardsGrid').innerHTML = html || `<p class="text-sm text-slate-400">No cards added yet.</p>`;
+    }
+
+    function renderLoansView() {
+      const fin = computeMonthlyFinancials();
+      const loans = db.loans.filter(l => passHolder(l.holder));
+
+      document.getElementById('loanSummaryStrip').innerHTML = `
+        <div class="glass-card rounded-xl p-4">
+          <span class="text-xs text-slate-400">Total Monthly EMI Commitment</span>
+          <div class="text-xl font-bold text-gold mt-1">${formatINR(fin.totalMonthlyEmi)} / month</div>
+        </div>
+        <div class="glass-card rounded-xl p-4">
+          <span class="text-xs text-slate-400">Total Remaining Balance Payable</span>
+          <div class="text-xl font-bold text-white mt-1">${formatINR(fin.totalRemainingDebt)}</div>
+        </div>
+        <div class="glass-card rounded-xl p-4">
+          <span class="text-xs text-slate-400">Active Loan Accounts</span>
+          <div class="text-xl font-bold text-emerald-400 mt-1">${fin.activeLoans.length} Active</div>
+        </div>
+      `;
+
+      let html = '';
+      loans.forEach(l => {
+        const isPaid = !!(l.paidMonths && l.paidMonths[currentMonth]);
+        const paidCount = Math.max(0, Number(l.totalMonths) - Number(l.remainingMonths));
+        const progressPct = Math.min(100, Math.round((paidCount / Number(l.totalMonths)) * 100));
+        const remBalance = Number(l.emi) * Number(l.remainingMonths);
+        const linkedCardObj = db.cards.find(c => c.id === l.cardId);
+
+        html += `
+          <div class="glass-card rounded-2xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${l.type === 'CARD_EMI' ? 'bg-amber-500/20 text-amber-300' : 'bg-blue-500/20 text-blue-300'}">
+                      ${l.type === 'CARD_EMI' ? 'Card EMI' : 'Bank Loan'}
+                    </span>
+                    <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${l.holder === 'Self' ? 'bg-indigo-500/20 text-indigo-300' : 'bg-pink-500/20 text-pink-300'}">
+                      Holder: ${l.holder}
+                    </span>
+                  </div>
+                  <h3 class="text-lg font-bold text-white mt-2">${l.name}</h3>
+                  <p class="text-xs text-slate-400">
+                    ${l.type === 'CARD_EMI' ? `Linked Card: <strong class="text-gold">${linkedCardObj ? linkedCardObj.name : 'Card'}</strong> (Auto-Deducted from Bill)` : `Bank: <strong class="text-white">${l.bankName || 'Bank Account'}</strong>`}
+                  </p>
+                </div>
+                <button onclick="deleteItem('loans', '${l.id}')" class="text-slate-500 hover:text-rose-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 my-4 p-3 rounded-xl bg-obsidian/70 border border-white/5 text-xs">
+                <div>
+                  <span class="text-slate-400 block">Monthly EMI</span>
+                  <span class="text-sm font-bold text-gold">${formatINR(l.emi)}</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block">Interest Rate</span>
+                  <span class="text-sm font-semibold text-white">${l.rate}% p.a.</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block">Balance Left</span>
+                  <span class="text-sm font-bold text-rose-300">${formatINR(remBalance)}</span>
+                </div>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="space-y-1.5 mb-4">
+                <div class="flex justify-between text-xs">
+                  <span class="text-slate-400">Tenure: <strong class="text-white">${l.remainingMonths} EMIs Remaining</strong> (out of ${l.totalMonths})</span>
+                  <span class="text-emerald-400 font-semibold">${progressPct}% Completed</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-obsidian overflow-hidden border border-white/10">
+                  <div class="h-full gold-gradient rounded-full" style="width: ${progressPct}%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs text-slate-400">EMI Date: Every <strong>${l.emiDay}th</strong></span>
+              <div class="flex items-center gap-2">
+                <button onclick="adjustRemainingTenor('${l.id}', -1)" class="px-2.5 py-1 rounded-lg bg-surface hover:bg-white/10 text-xs text-slate-300 border border-white/10" title="Reduce 1 Remaining Month">-1 EMI Left</button>
+                <button onclick="toggleLoanPaid('${l.id}')" class="px-3 py-1 rounded-lg text-xs font-bold transition ${isPaid ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'}">
+                  ${isPaid ? `✓ Paid (${currentMonth})` : `Mark Paid (${currentMonth})`}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('loansGrid').innerHTML = html || `<p class="text-sm text-slate-400">No loans found.</p>`;
+    }
+
+    function renderCashflowView() {
+      const fin = computeMonthlyFinancials();
+
+      document.getElementById('cashflowIncomeTotal').textContent = formatINR(fin.totalIncome);
+      document.getElementById('cashflowExpenseTotals').textContent = `${formatINR(fin.directBankExpenses)} Cash / ${formatINR(fin.totalCategorySpend)} Total`;
+
+      // Income List
+      let incHtml = '';
+      fin.monthIncomes.forEach(i => {
+        incHtml += `
+          <div class="flex items-center justify-between p-3 rounded-xl bg-obsidian/70 border border-white/5">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-semibold text-white">${i.source}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-300">${i.holder}</span>
+              </div>
+              <span class="text-[11px] text-slate-400">${i.date}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-bold text-emerald-400">+ ${formatINR(i.amount)}</span>
+              <button onclick="deleteItem('incomes', '${i.id}')" class="text-slate-500 hover:text-rose-400"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('incomeList').innerHTML = incHtml || `<p class="text-xs text-slate-500 text-center py-4">No income entries for ${currentMonth}</p>`;
+
+      // Expense List
+      let expHtml = '';
+      fin.monthExpenses.forEach(e => {
+        const isRupay = e.mode === 'RUPAY_CC';
+        expHtml += `
+          <div class="flex items-center justify-between p-3 rounded-xl bg-obsidian/70 border ${isRupay ? 'border-amber-500/30' : 'border-white/5'}">
+            <div>
+              <div class="flex items-center flex-wrap gap-1.5">
+                <span class="text-sm font-semibold text-white">${e.desc}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-gold/15 text-gold">${e.category}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full ${isRupay ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/15 text-emerald-300'}">
+                  ${isRupay ? 'RuPay CC (Excluded from Cash Balance)' : 'GPay Bank/Cash'}
+                </span>
+              </div>
+              <span class="text-[11px] text-slate-400">${e.date} • Holder: ${e.holder}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-bold ${isRupay ? 'text-amber-300' : 'text-rose-400'}">${formatINR(e.amount)}</span>
+              <button onclick="deleteItem('expenses', '${e.id}')" class="text-slate-500 hover:text-rose-400"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('expenseList').innerHTML = expHtml || `<p class="text-xs text-slate-500 text-center py-4">No GPay expenses logged for ${currentMonth}</p>`;
+    }
+
+    function renderReportsView() {
+      const fin = computeMonthlyFinancials();
+
+      // Differential Equation Explanation Card
+      document.getElementById('differentialEquationBox').innerHTML = `
+        <h3 class="text-sm font-bold uppercase tracking-wider text-gold mb-4">Income vs. True Outflow Differential Math (${currentMonth})</h3>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-center">
+          <div class="p-3 rounded-xl bg-obsidian border border-emerald-500/30">
+            <span class="text-[11px] text-slate-400 block">Total Income</span>
+            <span class="text-lg font-bold text-emerald-400">${formatINR(fin.totalIncome)}</span>
+          </div>
+          <div class="p-3 rounded-xl bg-obsidian border border-white/10">
+            <span class="text-[11px] text-slate-400 block">(-) All Active EMIs</span>
+            <span class="text-lg font-bold text-rose-300">${formatINR(fin.totalMonthlyEmi)}</span>
+          </div>
+          <div class="p-3 rounded-xl bg-obsidian border border-white/10">
+            <span class="text-[11px] text-slate-400 block">(-) Net Card Bills*</span>
+            <span class="text-lg font-bold text-amber-300">${formatINR(fin.totalNetCardBills)}</span>
+          </div>
+          <div class="p-3 rounded-xl bg-obsidian border border-white/10">
+            <span class="text-[11px] text-slate-400 block">(-) Direct GPay Cash</span>
+            <span class="text-lg font-bold text-rose-400">${formatINR(fin.directBankExpenses)}</span>
+          </div>
+          <div class="p-3 rounded-xl gold-gradient text-obsidian font-bold">
+            <span class="text-[11px] uppercase block opacity-80">(=) Net Differential</span>
+            <span class="text-lg font-extrabold">${formatINR(fin.netDifferential)}</span>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-3">
+          *Note: RuPay Credit Card GPay spends (${formatINR(fin.rupayCcExpenses)}) are shown in the Category breakdown below for tracking, but excluded from Direct Cash above because they are already part of your Credit Card Bill.
+        </p>
+      `;
+
+      // Group Expenses by Category
+      const catMap = {};
+      fin.monthExpenses.forEach(e => {
+        if (!catMap[e.category]) catMap[e.category] = { total: 0, items: [] };
+        catMap[e.category].total += Number(e.amount);
+        catMap[e.category].items.push(e);
+      });
+
+      const categories = Object.keys(catMap);
+      if (!selectedReportCategory && categories.length > 0) {
+        selectedReportCategory = categories[0];
+      }
+
+      let catHtml = '';
+      categories.forEach(cat => {
+        const data = catMap[cat];
+        const pct = fin.totalCategorySpend > 0 ? Math.round((data.total / fin.totalCategorySpend) * 100) : 0;
+        const isSelected = selectedReportCategory === cat;
+
+        catHtml += `
+          <div onclick="selectCategoryDrilldown('${cat}')" class="p-4 rounded-xl cursor-pointer transition all ${isSelected ? 'bg-gold/15 border-2 border-gold' : 'bg-obsidian/70 border border-white/10 hover:border-gold/40'}">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="folder-kanban" class="w-4 h-4 text-gold"></i> ${cat}
+              </span>
+              <span class="text-sm font-bold text-gold">${formatINR(data.total)} (${pct}%)</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-obsidian overflow-hidden">
+              <div class="h-full gold-gradient" style="width: ${pct}%"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1.5">${data.items.length} transactions • Click to view date-wise details →</p>
+          </div>
+        `;
+      });
+
+      document.getElementById('categoryCardsList').innerHTML = catHtml || `<p class="text-xs text-slate-500 py-4">No expenses recorded in ${currentMonth}.</p>`;
+
+      // Render Drill-down Right Panel
+      if (selectedReportCategory && catMap[selectedReportCategory]) {
+        const activeCat = catMap[selectedReportCategory];
+        document.getElementById('drilldownCategoryTitle').textContent = `${selectedReportCategory} (${currentMonth})`;
+        document.getElementById('drilldownCategoryTotal').textContent = formatINR(activeCat.total);
+
+        let drillHtml = '';
+        activeCat.items
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .forEach(item => {
+            drillHtml += `
+              <div class="p-3.5 rounded-xl bg-obsidian border border-white/10 flex justify-between items-center">
+                <div>
+                  <span class="text-sm font-semibold text-white block">${item.desc}</span>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span class="text-xs text-gold font-medium">📅 ${item.date}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded bg-white/10 text-slate-300">${item.holder}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded ${item.mode === 'RUPAY_CC' ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}">
+                      ${item.mode === 'RUPAY_CC' ? 'RuPay Credit Card' : 'GPay Bank'}
+                    </span>
+                  </div>
+                </div>
+                <span class="text-sm font-bold text-white">${formatINR(item.amount)}</span>
+              </div>
+            `;
+          });
+        document.getElementById('drilldownTransactionsList').innerHTML = drillHtml;
+      } else {
+        document.getElementById('drilldownCategoryTitle').textContent = 'Select a Category';
+        document.getElementById('drilldownCategoryTotal').textContent = '₹0';
+        document.getElementById('drilldownTransactionsList').innerHTML = `<p class="text-xs text-slate-500 py-6 text-center">Click on any category on the left to inspect date-wise expenses.</p>`;
+      }
+    }
+
+    // ==================== KHATA BOOK LOGIC ====================
+
+    function getFriendBalance(friend) {
+      // Positive = Maine Diye (Friend owes me / Lena Hai)
+      // Negative = Maine Liye (I owe friend / Dena Hai)
+      return (friend.txns || []).reduce((acc, t) => {
+        return t.type === 'GAVE' ? acc + Number(t.amount) : acc - Number(t.amount);
+      }, 0);
+    }
+
+    function renderKhataView() {
+      if (!selectedKhataFriendId && db.khataFriends.length > 0) {
+        selectedKhataFriendId = db.khataFriends[0].id;
+      }
+
+      let listHtml = '';
+      db.khataFriends.forEach(f => {
+        const bal = getFriendBalance(f);
+        const isActive = f.id === selectedKhataFriendId;
+        const badgeColor = bal > 0 ? 'text-emerald-400' : (bal < 0 ? 'text-rose-400' : 'text-slate-400');
+        const badgeLabel = bal > 0 ? 'Apko Lena Hai' : (bal < 0 ? 'Apko Dena Hai' : 'Settled');
+
+        listHtml += `
+          <div onclick="selectKhataFriend('${f.id}')" class="p-3.5 rounded-xl cursor-pointer transition flex justify-between items-center ${isActive ? 'bg-gold/15 border-2 border-gold' : 'bg-obsidian/70 border border-white/10 hover:border-white/25'}">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full gold-gradient text-obsidian font-bold flex items-center justify-center text-sm">
+                ${f.name.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white">${f.name}</h4>
+                <span class="text-[11px] text-slate-400">${f.phone || 'Personal Khata'}</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-sm font-bold ${badgeColor} block">${formatINR(Math.abs(bal))}</span>
+              <span class="text-[10px] uppercase tracking-wider ${badgeColor}">${badgeLabel}</span>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('khataFriendsList').innerHTML = listHtml || `<p class="text-xs text-slate-500">No friends added yet.</p>`;
+
+      // Render Selected Friend Ledger
+      const friend = db.khataFriends.find(f => f.id === selectedKhataFriendId);
+      const detailBox = document.getElementById('khataDetailPanel');
+
+      if (!friend) {
+        detailBox.innerHTML = `<p class="text-sm text-slate-400 py-8 text-center">Select or add a friend to view date-wise Len-Den.</p>`;
+        return;
+      }
+
+      const bal = getFriendBalance(friend);
+      const statusText = bal > 0 ? `Apko ${friend.name} se ${formatINR(bal)} LENA HAI` : (bal < 0 ? `Apko ${friend.name} ko ${formatINR(Math.abs(bal))} DENA HAI` : 'All Settled (₹0 Balance)');
+      const statusColor = bal > 0 ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : (bal < 0 ? 'bg-rose-500/15 text-rose-300 border-rose-500/30' : 'bg-white/5 text-slate-300 border-white/10');
+
+      let txnHtml = '';
+      (friend.txns || []).slice().reverse().forEach(t => {
+        const isGave = t.type === 'GAVE';
+        txnHtml += `
+          <div class="p-3 rounded-xl bg-obsidian border border-white/10 flex justify-between items-center">
+            <div>
+              <span class="text-sm font-semibold text-white block">${t.desc}</span>
+              <span class="text-xs text-slate-400">📅 ${t.date}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="text-right">
+                <span class="text-xs uppercase font-bold block ${isGave ? 'text-emerald-400' : 'text-rose-400'}">
+                  ${isGave ? 'Maine Diye (You Gave)' : 'Maine Liye (You Got)'}
+                </span>
+                <span class="text-sm font-bold text-white">${formatINR(t.amount)}</span>
+              </div>
+              <button onclick="deleteKhataTxn('${friend.id}', '${t.id}')" class="text-slate-500 hover:text-rose-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        `;
+      });
+
+      detailBox.innerHTML = `
+        <div class="flex justify-between items-center pb-4 border-b border-white/10 mb-4">
+          <div>
+            <h3 class="text-xl font-serif font-bold text-white">${friend.name} - Ledger</h3>
+            <p class="text-xs text-slate-400">${friend.phone || 'Date-wise Hisaab'}</p>
+          </div>
+          <div class="px-3.5 py-2 rounded-xl border text-xs font-bold ${statusColor}">
+            ${statusText}
+          </div>
+        </div>
+
+        <!-- Quick Add Khata Transaction Form -->
+        <form onsubmit="addKhataTxn(event, '${friend.id}')" class="p-4 rounded-xl bg-obsidian/90 border border-white/10 mb-4 space-y-3 text-xs">
+          <div class="font-bold text-gold uppercase tracking-wider">New Len-Den Entry with ${friend.name}</div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+            <input type="number" id="khataAmt" required min="1" placeholder="Amount (₹)" class="bg-surface border border-white/15 rounded-lg px-3 py-2 text-white outline-none focus:border-gold">
+            <input type="date" id="khataDate" required value="${new Date().toISOString().split('T')[0]}" class="bg-surface border border-white/15 rounded-lg px-3 py-2 text-white outline-none focus:border-gold">
+            <select id="khataType" class="bg-surface border border-white/15 rounded-lg px-3 py-2 text-white outline-none focus:border-gold">
+              <option value="GAVE">🟢 Maine Diye (You Gave)</option>
+              <option value="GOT">🔴 Maine Liye (You Got)</option>
+            </select>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="khataDesc" required placeholder="Description (e.g. Cash given for ticket, GPay transfer)" class="flex-1 bg-surface border border-white/15 rounded-lg px-3 py-2 text-white outline-none focus:border-gold">
+            <button type="submit" class="px-4 py-2 rounded-lg gold-gradient text-obsidian font-bold whitespace-nowrap">Save Entry</button>
+          </div>
+        </form>
+
+        <!-- Transaction History -->
+        <div class="space-y-2 max-h-72 overflow-y-auto pr-1">
+          ${txnHtml || '<p class="text-xs text-slate-500 text-center py-4">No transactions recorded yet.</p>'}
+        </div>
+      `;
+    }
+
+    // ==================== INTERACTION & FORM HANDLERS ====================
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.dataset.tab === tabId) {
+          btn.className = 'nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap bg-gold/15 text-gold border border-gold/30';
+        } else {
+          btn.className = 'nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap';
+        }
+      });
+      renderAll();
+    }
+
+    function setHolderFilter(holder) {
+      currentHolderFilter = holder;
+      ['ALL', 'Self', 'Wife'].forEach(h => {
+        const btn = document.getElementById(`filter-${h}`);
+        if (h === holder) {
+          btn.className = 'text-xs py-1.5 rounded-md font-semibold transition-all bg-gold text-obsidian';
+        } else {
+          btn.className = 'text-xs py-1.5 rounded-md font-medium text-slate-300 hover:text-white transition-all';
+        }
+      });
+      renderAll();
+    }
+
+    function handleGlobalChange() {
+      currentMonth = document.getElementById('globalMonth').value || '2026-10';
+      renderAll();
+    }
+
+    function populateCardDropdowns() {
+      const cardOptions = db.cards.map(c => `<option value="${c.id}">${c.name} (${c.holder})</option>`).join('');
+      document.getElementById('billCardId').innerHTML = cardOptions;
+      document.getElementById('loanLinkedCard').innerHTML = cardOptions;
+      document.getElementById('expLinkedCard').innerHTML = cardOptions;
+    }
+
+    function openModal(id) {
+      populateCardDropdowns();
+      if (id === 'modal-bill') {
+        document.getElementById('billMonth').value = currentMonth;
+        previewBillDeduction();
+      }
+      if (id === 'modal-income') {
+        document.getElementById('incDate').value = `${currentMonth}-01`;
+      }
+      if (id === 'modal-expense') {
+        document.getElementById('expDate').value = `${currentMonth}-10`;
+      }
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function openBillModalForCard(cardId) {
+      openModal('modal-bill');
+      document.getElementById('billCardId').value = cardId;
+      const existing = db.cardBills.find(b => b.cardId === cardId && b.month === currentMonth);
+      document.getElementById('billTotalAmount').value = existing ? existing.totalBill : '';
+      previewBillDeduction();
+    }
+
+    function previewBillDeduction() {
+      const cardId = document.getElementById('billCardId').value;
+      const total = Number(document.getElementById('billTotalAmount').value) || 0;
+      const emiSum = getCardActiveEmiSum(cardId);
+      const net = Math.max(0, total - emiSum);
+
+      document.getElementById('prevTotalBill').textContent = formatINR(total);
+      document.getElementById('prevCardEmi').textContent = `- ${formatINR(emiSum)}`;
+      document.getElementById('prevNetBill').textContent = formatINR(net);
+    }
+
+    function toggleLoanCardSelect() {
+      const type = document.getElementById('loanType').value;
+      document.getElementById('loanCardSelectWrapper').classList.toggle('hidden', type !== 'CARD_EMI');
+      document.getElementById('loanBankNameWrapper').classList.toggle('hidden', type === 'CARD_EMI');
+    }
+
+    function toggleExpCardSelect() {
+      const mode = document.getElementById('expMode').value;
+      document.getElementById('expCardSelectWrapper').classList.toggle('hidden', mode !== 'RUPAY_CC');
+    }
+
+    // Form Savers
+    function saveCard(e) {
+      e.preventDefault();
+      db.cards.push({
+        id: 'c_' + Date.now(),
+        name: document.getElementById('cardName').value,
+        holder: document.getElementById('cardHolder').value,
+        network: document.getElementById('cardNetwork').value,
+        billDay: Number(document.getElementById('cardBillDay').value),
+        dueDay: Number(document.getElementById('cardDueDay').value)
+      });
+      e.target.reset();
+      closeModal('modal-card');
+      saveDb();
+    }
+
+    function saveCardBill(e) {
+      e.preventDefault();
+      const cardId = document.getElementById('billCardId').value;
+      const month = document.getElementById('billMonth').value;
+      const totalBill = Number(document.getElementById('billTotalAmount').value);
+
+      const existingIdx = db.cardBills.findIndex(b => b.cardId === cardId && b.month === month);
+      if (existingIdx >= 0) {
+        db.cardBills[existingIdx].totalBill = totalBill;
+      } else {
+        db.cardBills.push({ id: 'b_' + Date.now(), cardId, month, totalBill, paid: false });
+      }
+      e.target.reset();
+      closeModal('modal-bill');
+      saveDb();
+    }
+
+    function saveLoan(e) {
+      e.preventDefault();
+      const type = document.getElementById('loanType').value;
+      db.loans.push({
+        id: 'l_' + Date.now(),
+        name: document.getElementById('loanName').value,
+        type,
+        cardId: type === 'CARD_EMI' ? document.getElementById('loanLinkedCard').value : null,
+        bankName: type === 'BANK_LOAN' ? document.getElementById('loanBankName').value : '',
+        holder: document.getElementById('loanHolder').value,
+        principal: Number(document.getElementById('loanPrincipal').value),
+        rate: Number(document.getElementById('loanRate').value),
+        emi: Number(document.getElementById('loanEmi').value),
+        emiDay: Number(document.getElementById('loanEmiDay').value),
+        totalMonths: Number(document.getElementById('loanTotalMonths').value),
+        remainingMonths: Number(document.getElementById('loanRemainingMonths').value),
+        paidMonths: {}
+      });
+      e.target.reset();
+      closeModal('modal-loan');
+      saveDb();
+    }
+
+    function saveIncome(e) {
+      e.preventDefault();
+      const date = document.getElementById('incDate').value;
+      db.incomes.push({
+        id: 'i_' + Date.now(),
+        source: document.getElementById('incSource').value,
+        amount: Number(document.getElementById('incAmount').value),
+        holder: document.getElementById('incHolder').value,
+        date,
+        month: date.slice(0, 7)
+      });
+      e.target.reset();
+      closeModal('modal-income');
+      saveDb();
+    }
+
+    function saveExpense(e) {
+      e.preventDefault();
+      const date = document.getElementById('expDate').value;
+      const mode = document.getElementById('expMode').value;
+      const category = document.getElementById('expCategory').value;
+      db.expenses.push({
+        id: 'e_' + Date.now(),
+        desc: document.getElementById('expDesc').value,
+        amount: Number(document.getElementById('expAmount').value),
+        category,
+        mode,
+        cardId: mode === 'RUPAY_CC' ? document.getElementById('expLinkedCard').value : null,
+        holder: document.getElementById('expHolder').value,
+        date,
+        month: date.slice(0, 7)
+      });
+      selectedReportCategory = category;
+      e.target.reset();
+      closeModal('modal-expense');
+      saveDb();
+    }
+
+    function saveFriend(e) {
+      e.preventDefault();
+      const newId = 'f_' + Date.now();
+      db.khataFriends.push({
+        id: newId,
+        name: document.getElementById('friendName').value,
+        phone: document.getElementById('friendPhone').value,
+        txns: []
+      });
+      selectedKhataFriendId = newId;
+      e.target.reset();
+      closeModal('modal-friend');
+      saveDb();
+    }
+
+    function addKhataTxn(e, friendId) {
+      e.preventDefault();
+      const friend = db.khataFriends.find(f => f.id === friendId);
+      if (!friend) return;
+      friend.txns.push({
+        id: 'kt_' + Date.now(),
+        amount: Number(document.getElementById('khataAmt').value),
+        date: document.getElementById('khataDate').value,
+        type: document.getElementById('khataType').value,
+        desc: document.getElementById('khataDesc').value
+      });
+      saveDb();
+    }
+
+    function deleteKhataTxn(friendId, txnId) {
+      const friend = db.khataFriends.find(f => f.id === friendId);
+      if (!friend) return;
+      friend.txns = friend.txns.filter(t => t.id !== txnId);
+      saveDb();
+    }
+
+    function toggleLoanPaid(loanId) {
+      const loan = db.loans.find(l => l.id === loanId);
+      if (!loan) return;
+      if (!loan.paidMonths) loan.paidMonths = {};
+      loan.paidMonths[currentMonth] = !loan.paidMonths[currentMonth];
+      saveDb();
+    }
+
+    function adjustRemainingTenor(loanId, delta) {
+      const loan = db.loans.find(l => l.id === loanId);
+      if (!loan) return;
+      loan.remainingMonths = Math.max(0, Number(loan.remainingMonths) + delta);
+      saveDb();
+    }
+
+    function toggleBillPaid(billId) {
+      const bill = db.cardBills.find(b => b.id === billId);
+      if (!bill) return;
+      bill.paid = !bill.paid;
+      saveDb();
+    }
+
+    function deleteItem(collection, id) {
+      db[collection] = db[collection].filter(item => item.id !== id);
+      saveDb();
+    }
+
+    function selectCategoryDrilldown(cat) {
+      selectedReportCategory = cat;
+      renderReportsView();
+      lucide.createIcons();
+    }
+
+    function selectKhataFriend(id) {
+      selectedKhataFriendId = id;
+      renderKhataView();
+      lucide.createIcons();
+    }
+
+    // Backup & Restore
+    function exportData() {
+      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Aura_Wealth_Backup_${currentMonth}.json`;
+      a.click();
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          db = JSON.parse(e.target.result);
+          saveDb();
+        } catch (err) {
+          alert('Invalid backup JSON file');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetDemoData() {
+      if (confirm('Reset all data back to sample luxury demo data?')) {
+        db = JSON.parse(JSON.stringify(defaultData));
+        saveDb();
+      }
+    }
+
+    function renderAll() {
+      renderDashboard();
+      renderCardsView();
+      renderLoansView();
+      renderCashflowView();
+      renderReportsView();
+      renderKhataView();
+      lucide.createIcons();
+    }
+
+    // Initialize App
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('globalMonth').value = currentMonth;
+      renderAll();
+    });
+  </script>
+</body>
+</html>
